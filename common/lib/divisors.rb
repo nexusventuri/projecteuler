@@ -6,11 +6,17 @@ class Divisors
   end
 
   def find(number)
-    result = []
-    (1..number).each() do |x| 
-      result << x if (number % x == 0)
+    Math.sqrt(number).floor().downto(1).inject([]) do |result, x| 
+      if(number % x == 0) 
+        result << x
+        result << number/x if number/x != x
+      end
+      result
     end
-    result
+  end
+
+  def find_proper_divisors(number)
+    find(number)[0..-2]
   end
 
   def count(number)

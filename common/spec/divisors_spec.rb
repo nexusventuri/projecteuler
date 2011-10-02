@@ -7,6 +7,17 @@ describe Divisors do
     divisors.find(4).should =~ [1, 2, 4]
     divisors.find(6).should =~ [1, 2, 3, 6]
     divisors.find(28).should =~ [1, 2, 4, 7, 14, 28]
+    divisors.find(36).should =~ [1, 2, 3, 4, 6, 9, 12, 18, 36]
+  end
+
+  it "should find proper divisors of a number" do
+    divisors.find_proper_divisors(1).should =~ []
+    divisors.find_proper_divisors(2).should =~ [1]
+    divisors.find_proper_divisors(3).should =~ [1]
+    divisors.find_proper_divisors(4).should =~ [1, 2]
+    divisors.find_proper_divisors(6).should =~ [1, 2, 3]
+    divisors.find_proper_divisors(28).should =~ [1, 2, 4, 7, 14]
+    divisors.find_proper_divisors(36).should =~ [1, 2, 3, 4, 6, 9, 12, 18]
   end
 
   it "Should count the number of divisors" do
