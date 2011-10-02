@@ -1,32 +1,30 @@
 require 'primes'
 
-class Divisors
-  def initialize 
-    @primes = Primes.new
-  end
-
-  def find(number)
-    Math.sqrt(number).floor().downto(1).inject([]) do |result, x| 
-      if(number % x == 0) 
+module DivisorModule
+  @@primes = Primes.new
+  def divisors
+    Math.sqrt(self).floor().downto(1).inject([]) do |result, x| 
+      if(self % x == 0) 
         result << x
-        result << number/x if number/x != x
+        result << self/x if self/x != x
       end
       result
     end
   end
 
-  def find_proper_divisors(number)
-    find(number)[0..-2]
+  def proper_divisors
+    divisors[0..-2]
   end
 
-  def count(number)
-    divisors = getFactors(number)
+  def count_divisors
+    divisors = get_factors
     divisors.values.reduce(1){|result, value| result * (value + 1)}
   end
 
-  def getFactors(remainder)
+  def get_factors
+    remainder = self
     divisors_map = {}
-    @primes.get_till(Math.sqrt(remainder).ceil).each do |x|
+    primes.get_till(Math.sqrt(remainder).floor).each do |x|
       while(remainder % x == 0)
         remainder = remainder/x
         divisors_map[x] = (divisors_map[x] || 0)  + 1
@@ -36,4 +34,16 @@ class Divisors
     divisors_map[remainder] = 1 if remainder != 1
     divisors_map
   end
+
+  def prime?
+    primes.get_till(self).last == self
+  end
+
+  def primes
+    @@primes
+  end
+end
+
+class Integer
+  include DivisorModule
 end

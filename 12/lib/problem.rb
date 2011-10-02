@@ -2,15 +2,12 @@ $:.unshift File.expand_path("../../../common/lib/", __FILE__)
 require 'divisors'
 
 class Problem
-  def initialize()
-    @divisors=Divisors.new
-  end
   def triangle_from_index(index)
     (index * (index + 1))/2
   end
 
   def divisors_for_triangle(index)
-    @divisors.count(triangle_from_index(index))
+    triangle_from_index(index).count_divisors
   end
 
   def first_more_than_divisor(lowerBond)

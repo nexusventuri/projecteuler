@@ -2,10 +2,6 @@ $:.unshift File.expand_path("../../../common/lib/", __FILE__)
 require 'divisors'
 
 class Problem21
-  def initialize()
-    @divisors = Divisors.new
-  end
-
   def get_amicable(number)
     possible_amicable = get_divisors_sum(number)
     return nil if possible_amicable == number
@@ -26,8 +22,6 @@ class Problem21
   end
 
   def get_divisors_sum(number)
-    divisors = @divisors.find_proper_divisors(number)
-    divisors.reduce(0){|result, x| result + x}
+    number.proper_divisors.reduce(0){|result, x| result + x}
   end
-
 end

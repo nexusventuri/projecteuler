@@ -1,33 +1,42 @@
 require 'divisors'
-describe Divisors do
-  it "Should find divisor of primes" do
-    divisors.find(1).should =~ [1]
-    divisors.find(2).should =~ [1, 2]
-    divisors.find(3).should =~ [1, 3]
-    divisors.find(4).should =~ [1, 2, 4]
-    divisors.find(6).should =~ [1, 2, 3, 6]
-    divisors.find(28).should =~ [1, 2, 4, 7, 14, 28]
-    divisors.find(36).should =~ [1, 2, 3, 4, 6, 9, 12, 18, 36]
+describe DivisorModule do
+  it "Should find divisor for an Integer" do
+    1.divisors.should =~ [1]
+    2.divisors.should =~ [1, 2]
+    3.divisors.should =~ [1, 3]
+    4.divisors.should =~ [1, 2, 4]
+    6.divisors.should =~ [1, 2, 3, 6]
+    28.divisors.should =~ [1, 2, 4, 7, 14, 28]
+    36.divisors.should =~ [1, 2, 3, 4, 6, 9, 12, 18, 36]
   end
 
   it "should find proper divisors of a number" do
-    divisors.find_proper_divisors(1).should =~ []
-    divisors.find_proper_divisors(2).should =~ [1]
-    divisors.find_proper_divisors(3).should =~ [1]
-    divisors.find_proper_divisors(4).should =~ [1, 2]
-    divisors.find_proper_divisors(6).should =~ [1, 2, 3]
-    divisors.find_proper_divisors(28).should =~ [1, 2, 4, 7, 14]
-    divisors.find_proper_divisors(36).should =~ [1, 2, 3, 4, 6, 9, 12, 18]
+    1.proper_divisors.should =~ []
+    2.proper_divisors.should =~ [1]
+    3.proper_divisors.should =~ [1]
+    4.proper_divisors.should =~ [1, 2]
+    6.proper_divisors.should =~ [1, 2, 3]
+    28.proper_divisors.should =~ [1, 2, 4, 7, 14]
+    36.proper_divisors.should =~ [1, 2, 3, 4, 6, 9, 12, 18]
   end
 
   it "Should count the number of divisors" do
-    divisors.count(1).should == 1
-    divisors.count(2).should == 2
-    divisors.count(3).should == 2
-    divisors.count(4).should == 3
-    divisors.count(6).should == 4
-    divisors.count(9).should == 3
-    divisors.count(28).should == 6
+    1.count_divisors.should == 1
+    2.count_divisors.should == 2
+    3.count_divisors.should == 2
+    4.count_divisors.should == 3
+    6.count_divisors.should == 4
+    9.count_divisors.should == 3
+    28.count_divisors.should == 6
+    36.count_divisors.should == 9
+  end
+
+  it "Should state if a number is prime" do
+    1.prime?.should == false
+    2.prime?.should == true
+    7.prime?.should == true
+    9.prime?.should == false
+    36.prime?.should == false
   end
 
 
