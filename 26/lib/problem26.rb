@@ -4,7 +4,7 @@ class Problem26
     (1..value).inject({}) { |acc, number|
       acc[number] = Reciprocal.new(number).recurring_cycle
       acc
-    }.max_by{|key, value| value.length}.first
+    }.max_by{|key, value| value.join("").length}.first
   end
 end
 
