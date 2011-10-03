@@ -16,11 +16,14 @@ describe Problem21 do
   end
 
   it "should find the result" do 
+    result = problem21.get_all_amicable(10000).inject(0){|result, num| result + num}
+    puts ""
     puts "----------------------------------------"
     puts "* And the result is:"
-    puts problem21.get_all_amicable(10000).inject(0){|result, num| result + num}
+    puts result
     puts "*"
     puts "----------------------------------------"
+    result.should == 31626
   end
 
   def problem21

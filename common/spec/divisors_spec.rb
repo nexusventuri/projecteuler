@@ -39,6 +39,19 @@ describe DivisorModule do
     36.prime?.should == false
   end
 
+  it "Should state if it's an abundant number" do
+    1.abundant?.should == false
+    6.abundant?.should == false
+    12.abundant?.should == true
+    16.abundant?.should == false
+  end
+
+  it "Should state if it's a perfect number" do
+    6.perfect?.should == true
+    12.perfect?.should == false
+    16.perfect?.should == false
+    28.perfect?.should == true
+  end
 
   def divisors
     @divisors = @divisors || Divisors.new

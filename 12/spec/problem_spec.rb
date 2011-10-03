@@ -12,8 +12,7 @@ describe Problem do
   end
 
   it "should filter by predicate" do
-    Problem.new.first_more_than_divisor(15).should == Problem.new.triangle_from_index(15)
-    print Problem.new.first_more_than_divisor(15)
+    Problem.new.first_more_than_divisor(15).should == 120
   end
 
   it "should calculate problem result" do 

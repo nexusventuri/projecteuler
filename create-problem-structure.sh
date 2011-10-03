@@ -10,7 +10,7 @@ echo "$:.unshift File.expand_path(\"../../../common/lib/\", __FILE__)" >> "$prob
 echo "class Problem$problemName" >> $problem
 echo "end" >> $problem
 
-specFile=$spec/problem_spec$problemName.rb
+specFile=$spec/problem$problemName\_spec.rb
 echo "describe Problem$problemName do" >> $specFile
 echo "  it \"returns...\" do">> $specFile
 echo "  end">> $specFile

@@ -39,6 +39,18 @@ module DivisorModule
     primes.get_till(self).last == self
   end
 
+  def abundant? 
+    sum_of_divisors > self
+  end
+
+  def perfect?
+    sum_of_divisors == self
+  end
+
+  def sum_of_divisors
+    proper_divisors.inject(0){|result, x| result + x} 
+  end
+
   def primes
     @@primes
   end
