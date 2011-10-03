@@ -1,5 +1,5 @@
 $:.unshift File.expand_path("../../../common/lib/", __FILE__)
-require 'divisors'
+require 'integer_utils'
 
 class Problem21
   def get_amicable(number)

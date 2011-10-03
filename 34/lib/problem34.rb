@@ -1,6 +1,5 @@
 $:.unshift File.expand_path("../../../common/lib/", __FILE__)
-require 'factorial'
-require 'divisors'
+require 'integer_utils'
 
 class Problem34
   def top_bound

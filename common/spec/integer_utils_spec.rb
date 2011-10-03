@@ -1,4 +1,5 @@
-require 'divisors'
+require 'integer_utils'
+
 describe DivisorModule do
   it "Should find divisor for an Integer" do
     1.divisors.should =~ [1]
@@ -51,6 +52,16 @@ describe DivisorModule do
     12.perfect?.should == false
     16.perfect?.should == false
     28.perfect?.should == true
+  end
+
+  it "Should calculate factorial for 0 and 1" do
+    0.factorial.should == 1
+    1.factorial.should == 1
+  end
+
+  it "Should calculate factorial for 3" do
+    3.factorial.should == 6
+    6.factorial.should == 720
   end
 
   def divisors

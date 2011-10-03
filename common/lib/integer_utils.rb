@@ -2,6 +2,8 @@ require 'primes'
 
 module DivisorModule
   @@primes = Primes.new
+  @@factorials = {1=>1, 0=>1}
+
   def divisors
     Math.sqrt(self).floor().downto(1).inject([]) do |result, x| 
       if(self % x == 0) 
@@ -53,6 +55,10 @@ module DivisorModule
 
   def digits
     self.to_s.each_char.map{|x| x.to_i}
+  end
+
+  def factorial()
+    @@factorials[self] ||= self * (self - 1).factorial()
   end
 
   def primes

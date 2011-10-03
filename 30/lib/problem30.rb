@@ -1,5 +1,5 @@
 $:.unshift File.expand_path("../../../common/lib/", __FILE__)
-require 'divisors.rb'
+require 'integer_utils'
 class Problem30
   def top_limit(exponent)
     log_limit = (1..100).detect {|x| 9**exponent * x < 10**(x-1)} 
