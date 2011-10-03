@@ -31,6 +31,43 @@ desc "By default runs last problem and the tests from the common folder"
 task :default => [:pre_commit, :latest] do 
 end
 
+desc "Creates a blank project with a problem{problem_id}.rb file and a problem{problem_id}_spec.rb file, the spec pointing to the problem and the problem pointing to the base directory for the common library"
+task :create, :problem_id do |t, args|
+  problem_id = args.problem_id
+  lib="#{problem_id}/lib"
+  spec="#{problem_id}/spec"
+  mkdir_p lib
+  mkdir_p spec
+
+  File.open("#{lib}/problem#{problem_id}.rb", "w") do |file| 
+    file.write <<-eos
+$:.unshift File.expand_path(\"../../../common/lib/\", __FILE__)
+
+class Problem#{problem_id}
+
+end
+
+    eos
+  end
+
+  File.open("#{spec}/problem#{problem_id}_spec.rb", "w") do |file|
+
+    file.write <<-eos
+require 'problem#{problem_id}'
+require 'solution_printer'
+
+describe Problem#{problem_id} do
+  it "I_represent_an_empty_test" do
+  end
+
+  xit \"Should solve the problem\" do
+    result = print_solution{"solveMe"}
+    result.should == 0
+  end
+end
+    eos
+  end
+end
 
 def get_spec_dirs
   Dir['**/spec'].map{|dir| File.expand_path(dir + "/..")}
