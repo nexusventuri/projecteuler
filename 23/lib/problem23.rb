@@ -14,8 +14,7 @@ class Problem23
     permutation_of_abundant = abundant.each_with_index.inject({}) do |acc, pair|
       o_value = pair[0]
       current_index = pair[1]
-      map_with_rest = (current_index..abundant.length - 1).map{|index|abundant[index]}.
-                                          inject(acc) do |list_of_sums, i_value|
+      map_with_rest = abundant[current_index..-1].inject(acc) do |list_of_sums, i_value|
         list_of_sums[o_value + i_value] = true
         list_of_sums
       end
