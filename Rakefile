@@ -10,14 +10,18 @@ LIGHT_BLUE="\e[01;34m"
 common_lib = "common/lib"
 
 task :run_all do
-  get_specs_dirs.each do |dir|
+  get_spec_dirs.each do |dir|
     execute_tests_in(dir)
   end
 end
 
-task :run_latest do
+task :latest do
   most_recent_project = get_spec_dirs.sort{|a,b| File.mtime(a) <=> File.mtime(b)}.last
   execute_tests_in(most_recent_project)
+end
+
+task :pre_commit do
+  execute_tests_in("common")
 end
 
 def get_spec_dirs
@@ -28,21 +32,21 @@ def execute_tests_in(basedir)
   spec_dir = Pathname.new(basedir).join("spec")
   lib_dir = Pathname.new(basedir).join("lib")
   if spec_dir.directory?
-    print_header basedir
+    print_result_header basedir
 
     output=`rspec #{spec_dir} -I #{lib_dir}`
     pretty_print_result(output)
 
-    print_footer
+    print_result_footer
   end
 end
 
-def print_header(dir)
+def print_result_header(dir)
     puts ""
-    puts "executing tests in #{dir}"
+    puts "Executing tests in #{dir}"
 end
 
-def print_footer()
+def print_result_footer()
     puts ""
     puts "----------------------------------"
     puts ""
