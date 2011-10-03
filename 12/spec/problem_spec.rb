@@ -1,4 +1,6 @@
-require 'problem.rb'
+require 'problem'
+require 'solution_printer'
+
 describe Problem do
   it "Should get triangle number from index" do
     Problem.new.triangle_from_index(1).should == 1
@@ -16,12 +18,7 @@ describe Problem do
   end
 
   it "should calculate problem result" do 
-    result = Problem.new.first_more_than_divisor(500)
-    puts ""
-    puts "----------------------------------------------"
-    puts "* Result:"
-    puts "* #{result}"
-    puts "----------------------------------------------"
+    result = print_solution {Problem.new.first_more_than_divisor(500)}
     result.should == 76576500
   end
 end

@@ -1,4 +1,5 @@
 require 'problem21'
+require 'solution_printer'
 
 describe Problem21 do
   before do
@@ -16,13 +17,8 @@ describe Problem21 do
   end
 
   it "should find the result" do 
-    result = problem21.get_all_amicable(10000).inject(0){|result, num| result + num}
-    puts ""
-    puts "----------------------------------------"
-    puts "* And the result is:"
-    puts result
-    puts "*"
-    puts "----------------------------------------"
+    result = print_solution{problem21.get_all_amicable(10000).inject(0){|result, num| result + num}}
+
     result.should == 31626
   end
 
