@@ -1,4 +1,5 @@
 $:.unshift File.expand_path("../../../common/lib/", __FILE__)
+require 'divisors.rb'
 class Problem30
   def top_limit(exponent)
     log_limit = (1..100).detect {|x| 9**exponent * x < 10**(x-1)} 
@@ -17,6 +18,6 @@ class Problem30
   end
 
   def calculate_sum_of_pow(value, exponent)
-    value.to_s.each_char.inject(0){|acc, digit| acc + digit.to_i ** exponent }
+    value.digits.inject(0){|acc, digit| acc + digit ** exponent }
   end
 end

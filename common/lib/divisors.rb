@@ -51,6 +51,10 @@ module DivisorModule
     proper_divisors.inject(0){|result, x| result + x} 
   end
 
+  def digits
+    self.to_s.each_char.map{|x| x.to_i}
+  end
+
   def primes
     @@primes
   end
