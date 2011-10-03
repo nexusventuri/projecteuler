@@ -40,33 +40,39 @@ task :create, :problem_id do |t, args|
   mkdir_p spec
 
   File.open("#{lib}/problem#{problem_id}.rb", "w") do |file| 
-    file.write <<-eos
+    file.write problem_template(problem_id)
+  end
+
+  File.open("#{spec}/problem#{problem_id}_spec.rb", "w") do |file|
+    file.write spec_template(problem_id)
+  end
+end
+
+def spec_template(problem_id)
+"""
+require 'problem#{problem_id}'
+require 'solution_printer'
+
+describe Problem#{problem_id} do
+  it \"I_represent_an_empty_test\" do
+  end
+
+  xit \"Should solve the problem\" do
+    result = print_solution{\"solveMe\"}
+    result.should == 0
+  end
+end
+"""
+end
+
+def problem_template(problem_id)
+"""
 $:.unshift File.expand_path(\"../../../common/lib/\", __FILE__)
 
 class Problem#{problem_id}
 
 end
-
-    eos
-  end
-
-  File.open("#{spec}/problem#{problem_id}_spec.rb", "w") do |file|
-
-    file.write <<-eos
-require 'problem#{problem_id}'
-require 'solution_printer'
-
-describe Problem#{problem_id} do
-  it "I_represent_an_empty_test" do
-  end
-
-  xit \"Should solve the problem\" do
-    result = print_solution{"solveMe"}
-    result.should == 0
-  end
-end
-    eos
-  end
+"""
 end
 
 def get_spec_dirs
