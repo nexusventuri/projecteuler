@@ -12,6 +12,7 @@ echo "end" >> $problem
 
 specFile=$spec/problem$problemName\_spec.rb
 echo "require 'problem$problemName'" >> $specFile
+echo "require 'solution_printer'" >> $specFile
 echo "" >> $specFile
 echo "describe Problem$problemName do" >> $specFile
 echo "  it \"returns...\" do">> $specFile
