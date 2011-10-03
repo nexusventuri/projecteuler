@@ -9,20 +9,28 @@ LIGHT_BLUE="\e[01;34m"
 
 common_lib = "common/lib"
 
+desc "Runs all tests"
 task :run_all do
   get_spec_dirs.each do |dir|
     execute_tests_in(dir)
   end
 end
 
+desc "Runs latest modified directory"
 task :latest do
   most_recent_project = get_spec_dirs.sort{|a,b| File.mtime(a) <=> File.mtime(b)}.last
   execute_tests_in(most_recent_project)
 end
 
+desc "Runs all the tests in the common folder(a library that might be virtually be shared by any problem)"
 task :pre_commit do
   execute_tests_in("common")
 end
+
+desc "By default runs last problem and the tests from the common folder"
+task :default => [:pre_commit, :latest] do 
+end
+
 
 def get_spec_dirs
   Dir['**/spec'].map{|dir| File.expand_path(dir + "/..")}
