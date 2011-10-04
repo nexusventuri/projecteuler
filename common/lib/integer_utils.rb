@@ -1,6 +1,6 @@
 require 'primes'
 
-module DivisorModule
+module IntegerUtils
   @@primes = Primes.new
   @@factorials = {1=>1, 0=>1}
 
@@ -37,8 +37,14 @@ module DivisorModule
     divisors_map
   end
 
+  def has_proper_prime_divisors?
+    result = primes.get_till(Math.sqrt(self).floor + 2).detect{|x| self != x && self % x == 0}
+    result.nil?
+  end
+
   def prime?
-    primes.get_till(self).last == self
+    return false if self == 1
+    has_proper_prime_divisors?
   end
 
   def abundant? 
@@ -66,11 +72,15 @@ module DivisorModule
     digits.sort == (1..my_digits.length).to_a
   end
 
+  def primes_smaller
+    primes.get_till(self)
+  end
+
   def primes
     @@primes
   end
 end
 
 class Integer
-  include DivisorModule
+  include IntegerUtils
 end

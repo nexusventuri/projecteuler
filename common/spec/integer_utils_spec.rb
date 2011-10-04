@@ -1,6 +1,6 @@
 require 'integer_utils'
 
-describe DivisorModule do
+describe IntegerUtils do
   it "Should find divisor for an Integer" do
     1.divisors.should =~ [1]
     2.divisors.should =~ [1, 2]
