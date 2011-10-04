@@ -57,8 +57,13 @@ module DivisorModule
     self.to_s.each_char.map{|x| x.to_i}
   end
 
-  def factorial()
+  def factorial
     @@factorials[self] ||= self * (self - 1).factorial()
+  end
+
+  def pandigital?
+    my_digits = digits 
+    digits.sort == (1..my_digits.length).to_a
   end
 
   def primes

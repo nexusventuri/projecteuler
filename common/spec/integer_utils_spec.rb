@@ -64,6 +64,13 @@ describe DivisorModule do
     6.factorial.should == 720
   end
 
+  it "Should state if it's a pandigital number" do
+    2143.pandigital?.should == true
+    21345.pandigital?.should == true
+    55994.pandigital?.should == false
+    21.pandigital?.should == true
+  end
+
   def divisors
     @divisors = @divisors || Divisors.new
   end
