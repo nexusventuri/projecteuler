@@ -22,6 +22,11 @@ task :latest do
   execute_tests_in(most_recent_project)
 end
 
+desc "Runs a specific test"
+task :run, :problem_id do |t, args|
+  execute_tests_in(args.problem_id)
+end
+
 desc "Runs all the tests in the common folder(a library that might be virtually be shared by any problem)"
 task :pre_commit do
   execute_tests_in("common")

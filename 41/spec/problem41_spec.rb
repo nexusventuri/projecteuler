@@ -7,10 +7,10 @@ describe Problem41 do
     Problem41.new.pandigital_prime_till(2143).should =~ [2143, 1423]
   end
 
-  xit "Should solve the problem" do
+  it "Should solve the problem" do
     # The limit is lower because from 1-9 any permutation is divisible by
     # 3 and the same for 1-8
     result = print_solution{Problem41.new.find_solution_pandigital(7654321)}
-    result.should == 0
+    result.should == 7652413
   end
 end
