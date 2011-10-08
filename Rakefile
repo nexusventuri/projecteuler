@@ -1,5 +1,6 @@
 include FileUtils
 require 'pathname'
+require 'benchmark'
 
 RED="\e[00;31m"
 YELLOW="\e[00;33m"
@@ -11,9 +12,11 @@ common_lib = "common/lib"
 
 desc "Runs all tests"
 task :run_all do
-  get_spec_dirs.sort.each do |dir|
-    execute_tests_in(dir)
-  end
+  time{
+    get_spec_dirs.sort.each do |dir|
+      execute_tests_in(dir)
+    end
+  }
 end
 
 desc "Runs latest modified directory"
@@ -114,5 +117,13 @@ def pretty_print_result(output)
 
   puts output
 
+  puts WHITE
+end
+
+def time
+  time = Benchmark.measure {yield}
+  puts LIGHT_BLUE 
+  puts "Total execution time:"
+  puts time.total
   puts WHITE
 end
