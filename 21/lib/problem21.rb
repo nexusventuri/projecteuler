@@ -3,16 +3,16 @@ require 'integer_utils'
 
 class Problem21
   def get_amicable(number)
-    possible_amicable = get_divisors_sum(number)
+    possible_amicable = number.sum_of_proper_divisors
     return nil if possible_amicable == number
-    other_amicable = get_divisors_sum(possible_amicable)
+    other_amicable = possible_amicable.sum_of_proper_divisors
 
     return nil if other_amicable != number
     possible_amicable
   end
 
   def get_all_amicable(limit)
-    (1..limit).inject([]) do |result, x|
+    (2..limit).inject([]) do |result, x|
       amicable = get_amicable(x) 
       unless(amicable.nil?)
         result << x
@@ -21,7 +21,4 @@ class Problem21
     end
   end
 
-  def get_divisors_sum(number)
-    number.proper_divisors.reduce(0){|result, x| result + x}
-  end
 end

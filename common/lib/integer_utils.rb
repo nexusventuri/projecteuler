@@ -1,4 +1,5 @@
 require 'primes'
+require 'benchmark'
 
 module IntegerUtils
   @@primes = Primes.new
@@ -14,9 +15,13 @@ module IntegerUtils
     end
   end
 
+  def proper_divisors2
+  end
+
   def proper_divisors
     divisors[0..-2]
   end
+
 
   def count_divisors
     divisors = get_factors
@@ -24,17 +29,26 @@ module IntegerUtils
   end
 
   def get_factors
+    inject_prime_factors({}) do |divisors_map, count, divisor| 
+      divisors_map[divisor] = count
+      divisors_map
+    end
+  end
+
+  def inject_prime_factors(initial_value)
     remainder = self
-    divisors_map = {}
+    result = initial_value
     primes.get_till(Math.sqrt(remainder).floor).each do |x|
+      count = 0
       while(remainder % x == 0)
         remainder = remainder/x
-        divisors_map[x] = (divisors_map[x] || 0)  + 1
+        count += 1
       end
-      return divisors_map if remainder == 1
+      result = yield result, count, x if count > 0
+      return result if remainder == 1
     end
-    divisors_map[remainder] = 1 if remainder != 1
-    divisors_map
+    result = yield result, 1, remainder if remainder != 1
+    result
   end
 
   def has_proper_prime_divisors?
@@ -48,15 +62,19 @@ module IntegerUtils
   end
 
   def abundant? 
-    sum_of_divisors > self
+    sum_of_proper_divisors > self
   end
 
   def perfect?
-    sum_of_divisors == self
+    sum_of_proper_divisors == self
   end
 
   def sum_of_divisors
-    proper_divisors.inject(0){|result, x| result + x} 
+    inject_prime_factors(1){|acc, count, prime| acc * (prime**(count+1) - 1)/(prime - 1)}
+  end
+
+  def sum_of_proper_divisors
+    sum_of_divisors - self
   end
 
   def digits
@@ -84,3 +102,14 @@ end
 class Integer
   include IntegerUtils
 end
+
+def print_time(label)
+  result = 0
+  time = Benchmark.measure {result = yield}
+  puts label
+  puts "Total execution time:"
+  puts time.total
+  result
+end
+
+
