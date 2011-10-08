@@ -11,7 +11,7 @@ common_lib = "common/lib"
 
 desc "Runs all tests"
 task :run_all do
-  get_spec_dirs.each do |dir|
+  get_spec_dirs.sort.each do |dir|
     execute_tests_in(dir)
   end
 end
