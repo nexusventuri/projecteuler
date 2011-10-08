@@ -1,6 +1,9 @@
 include FileUtils
 require 'pathname'
 require 'benchmark'
+require 'nokogiri'
+require 'open-uri'
+require 'reverse-markdown'
 
 RED="\e[00;31m"
 YELLOW="\e[00;33m"
@@ -17,6 +20,10 @@ task :run_all do
       execute_tests_in(dir)
     end
   }
+end
+
+desc "Get the list of all the folders"
+task :problem_list do
 end
 
 desc "Runs latest modified directory"
@@ -40,7 +47,7 @@ task :default => [:pre_commit, :latest] do
 end
 
 desc "Creates a blank project with a problem{problem_id}.rb file and a problem{problem_id}_spec.rb file, the spec pointing to the problem and the problem pointing to the base directory for the common library"
-task :create, :problem_id do |t, args|
+task :create, [:problem_id] => [:problem_content] do |t, args|
   problem_id = args.problem_id
   lib="#{problem_id}/lib"
   spec="#{problem_id}/spec"
@@ -53,6 +60,32 @@ task :create, :problem_id do |t, args|
 
   File.open("#{spec}/problem#{problem_id}_spec.rb", "w") do |file|
     file.write spec_template(problem_id)
+  end
+end
+
+desc "reload all description"
+task :all_desc do
+  get_spec_dirs.keep_if{|name| name =~ /\d+$/}.each{|name| download_description name[/\d+$/]}
+end
+
+desc "downloads the problem description"
+task :desc, :problem_id do |t, args|
+  problem_id = args.problem_id
+  download_description(problem_id)
+end
+
+def download_description(problem_id)
+  problem_url = "http://projecteuler.net/problem=#{problem_id}"
+  doc = Nokogiri::HTML.parse(open(problem_url))
+  problem_content = doc.css('div#problem_content').to_s
+
+  doc="#{problem_id}/doc"
+  mkdir_p doc
+
+  File.open("#{doc}/problem#{problem_id}.markdown", "w") do |file|
+    problem_content = problem_content.gsub(/br\>/, "br />").gsub(/(<img[^>]+)>/, "$1 />")
+    doc_content = ReverseMarkdown.new.parse_string "#{problem_content}"
+    file.write doc_content
   end
 end
 
