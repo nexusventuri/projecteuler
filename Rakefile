@@ -75,16 +75,21 @@ task :desc, :problem_id do |t, args|
 end
 
 def download_description(problem_id)
+  print_result_separator
+
   problem_url = "http://projecteuler.net/problem=#{problem_id}"
+  puts "downloading from #{problem_url}"
   doc = Nokogiri::HTML.parse(open(problem_url))
-  problem_content = doc.css('div#problem_content').to_s
+  problem_content = doc.css('div.problem_content').to_s
 
   doc="#{problem_id}/doc"
   mkdir_p doc
 
   File.open("#{doc}/problem#{problem_id}.markdown", "w") do |file|
     problem_content = problem_content.gsub(/br\>/, "br />").gsub(/(<img[^>]+)>/, "$1 />")
-    doc_content = ReverseMarkdown.new.parse_string "#{problem_content}"
+    puts problem_content
+    doc_content = ReverseMarkdown.new.parse_string problem_content
+    puts "Content:\n#{doc_content}"
     file.write doc_content
   end
 end
@@ -129,7 +134,7 @@ def execute_tests_in(basedir)
     output=`rspec #{spec_dir} -I #{lib_dir}`
     pretty_print_result(output)
 
-    print_result_footer
+    print_result_separator
   end
 end
 
@@ -138,7 +143,7 @@ def print_result_header(dir)
     puts "Executing tests in #{dir}"
 end
 
-def print_result_footer()
+def print_result_separator()
     puts ""
     puts "----------------------------------"
     puts ""
