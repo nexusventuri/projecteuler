@@ -15,13 +15,9 @@ module IntegerUtils
     end
   end
 
-  def proper_divisors2
-  end
-
   def proper_divisors
     divisors[0..-2]
   end
-
 
   def count_divisors
     divisors = get_factors
