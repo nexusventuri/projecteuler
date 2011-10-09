@@ -86,7 +86,7 @@ def download_description(problem_id)
   mkdir_p doc
 
   File.open("#{doc}/problem#{problem_id}.markdown", "w") do |file|
-    problem_content = problem_content.gsub(/br\>/, "br />").gsub(/(<img[^>]+)>/, "$1 />")
+    problem_content = problem_content.gsub(/br\>/, "br />").gsub(/(<img[^>]+)>/, "\\1 />").gsub("\n", "")
     puts problem_content
     doc_content = ReverseMarkdown.new.parse_string problem_content
     puts "Content:\n#{doc_content}"
