@@ -15,11 +15,20 @@ common_lib = "common/lib"
 
 desc "Runs all tests"
 task :run_all do
+  success = 0
+  failures = 0
   time{
     get_spec_dirs.sort.each do |dir|
-      execute_tests_in(dir)
+      result = execute_tests_in(dir)
+      if result
+        success += 1
+      else
+        failures += 1
+      end
     end
   }
+  puts "And we had #{success} success and #{failures} failures"
+  puts
 end
 
 desc "Get the list of all the folders"
@@ -132,10 +141,11 @@ def execute_tests_in(basedir)
     print_result_header basedir
 
     output=`rspec #{spec_dir} -I #{lib_dir}`
-    pretty_print_result(output)
+    command_result = pretty_print_result(output)
 
     print_result_separator
   end
+  command_result
 end
 
 def print_result_header(dir)
@@ -156,6 +166,7 @@ def pretty_print_result(output)
   puts output
 
   puts WHITE
+  $? == 0
 end
 
 def time
