@@ -3,32 +3,20 @@ require 'pathname'
 require 'benchmark'
 require 'nokogiri'
 require 'open-uri'
+require_relative 'helpers.rb'
 require 'reverse-markdown'
-
-RED="\e[00;31m"
-YELLOW="\e[00;33m"
-GREEN="\e[00;32m"
-WHITE="\e[01;37m"
-LIGHT_BLUE="\e[01;34m"
 
 common_lib = "common/lib"
 
 desc "Runs all tests"
 task :run_all do
-  success = 0
-  failures = 0
-  time{
-    get_spec_dirs.sort.each do |dir|
-      result = execute_tests_in(dir)
-      if result
-        success += 1
-      else
-        failures += 1
+  result_report{
+    time {
+      get_spec_dirs.sort.inject([]) do |acc, dir|
+        acc << execute_tests_in(dir)
       end
-    end
+    }
   }
-  puts "And we had #{success} success and #{failures} failures"
-  puts
 end
 
 desc "Get the list of all the folders"
@@ -72,12 +60,12 @@ task :create, [:problem_id] => [:problem_content] do |t, args|
   end
 end
 
-desc "reload all description"
+desc "Reload all description"
 task :all_desc do
   get_spec_dirs.keep_if{|name| name =~ /\d+$/}.each{|name| download_description name[/\d+$/]}
 end
 
-desc "downloads the problem description"
+desc "Downloads the problem description"
 task :desc, :problem_id do |t, args|
   problem_id = args.problem_id
   download_description(problem_id)
@@ -141,11 +129,13 @@ def execute_tests_in(basedir)
     print_result_header basedir
 
     output=`rspec #{spec_dir} -I #{lib_dir}`
-    command_result = pretty_print_result(output)
 
+    result = BuildResult.new(basedir, output, $?)
+    result.pretty_print_result
     print_result_separator
   end
-  command_result
+  
+  result
 end
 
 def print_result_header(dir)
@@ -159,20 +149,31 @@ def print_result_separator()
     puts ""
 end
 
-def pretty_print_result(output)
-  puts RED
-  puts GREEN if $? == 0
-
-  puts output
-
-  puts WHITE
-  $? == 0
-end
-
 def time
-  time = Benchmark.measure {yield}
+  result = nil
+  time = Benchmark.measure {result = yield}
   puts LIGHT_BLUE 
   puts "Total execution time:"
   puts time.total
   puts WHITE
+  result
+end
+
+def result_report
+  results = yield
+
+  total_suites = results.length
+  total_success = results.inject(0) do |acc, result| 
+    acc += 1 if result.success?
+    acc
+  end
+
+  tests_without_results = results.inject([]) do |acc, result| 
+    acc << result.problem_number if !result.has_solution? && result.problem?
+    acc
+  end
+
+  puts "We ran #{total_suites} test suites and had #{total_success} success and #{total_suites - total_success} failures"
+  puts "It seems there many tests without results(#{tests_without_results.length}), to be precise here's the list:\n* #{tests_without_results.join("\n* ")}" if tests_without_results.length > 0 
+  puts
 end
