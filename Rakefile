@@ -4,7 +4,6 @@ require 'benchmark'
 require 'nokogiri'
 require 'open-uri'
 require_relative 'helpers.rb'
-require 'reverse-markdown'
 
 common_lib = "common/lib"
 
@@ -44,7 +43,7 @@ task :default => [:pre_commit, :latest] do
 end
 
 desc "Creates a blank project with a problem{problem_id}.rb file and a problem{problem_id}_spec.rb file, the spec pointing to the problem and the problem pointing to the base directory for the common library"
-task :create, [:problem_id] => [:problem_content] do |t, args|
+task :create, [:problem_id] => [:desc] do |t, args|
   problem_id = args.problem_id
   lib="#{problem_id}/lib"
   spec="#{problem_id}/spec"
@@ -72,6 +71,7 @@ task :desc, :problem_id do |t, args|
 end
 
 def download_description(problem_id)
+  require 'reverse-markdown'
   print_result_separator
 
   problem_url = "http://projecteuler.net/problem=#{problem_id}"
