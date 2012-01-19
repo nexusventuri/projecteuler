@@ -1,11 +1,10 @@
 $:.unshift File.expand_path("../../../common/lib/", __FILE__)
 class Problem26
-  def find_longest_recurring_cycle_till(value)
-    (1..value).inject({}) { |acc, number|
-      acc[number] = Reciprocal.new(number).recurring_cycle
-      acc
-    }.max_by{|key, value| value.join("").length}.first
+  def find_longest_recurring_cycle_upto(value)
+    (1..value).map {|num| Reciprocal.new(num).recurring_cycle}
+              .max_by {|val|val.length}.length + 1
   end
+
 end
 
 class Reciprocal

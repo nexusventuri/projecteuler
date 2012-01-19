@@ -17,11 +17,11 @@ end
 
 describe Problem26 do
   it "Should find the longest recurring cycle in a range" do
-    Problem26.new.find_longest_recurring_cycle_till(10).should == 7
+    Problem26.new.find_longest_recurring_cycle_upto(10).should == 7
   end
 
   it "Should find the longest recurring cycle in a range" do
-    solution = print_solution{Problem26.new.find_longest_recurring_cycle_till(1000)}
+    solution = print_solution{Problem26.new.find_longest_recurring_cycle_upto(1000)}
     solution.should == 983
   end
 end
