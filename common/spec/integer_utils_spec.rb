@@ -71,6 +71,32 @@ describe IntegerUtils do
     21.pandigital?.should == true
   end
 
+  it "Should find start pandigital numbers" do
+    123456789333.start_pandigital?(1..9).should == true
+    1235647877777777.start_pandigital?(1..8).should ==true
+    1204777777.start_pandigital?(0..2).should == true
+  end
+
+  it "Should find end pandigital numbers" do
+    3334102.end_pandigital?(0..2).should == true
+    3333102.end_pandigital?(0..3).should == true
+    33331354678902.end_pandigital?(0..9).should == true
+    3333135467892.end_pandigital?(1..9).should == true
+    1.end_pandigital?(1..9).should == false
+  end
+
+  it "Should count the number of digits" do
+    1.length10.should == 1
+    0.length10.should == 1
+    25.length10.should == 2
+    1234567890.length10.should == 10
+  end
+
+  it "Should get the end digits" do
+    10.end_digits(2).should == 10
+    20.end_digits(1000).should == 20
+    12345.end_digits(3).should == 345
+  end
   def divisors
     @divisors = @divisors || Divisors.new
   end
