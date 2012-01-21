@@ -43,7 +43,7 @@ task :default => [:pre_commit, :latest] do
 end
 
 desc "Creates a blank project with a problem{problem_id}.rb file and a problem{problem_id}_spec.rb file, the spec pointing to the problem and the problem pointing to the base directory for the common library"
-task :create, [:problem_id] => [:desc] do |t, args|
+task :create, [:problem_id] do |t, args|
   problem_id = args.problem_id
   lib="#{problem_id}/lib"
   spec="#{problem_id}/spec"
