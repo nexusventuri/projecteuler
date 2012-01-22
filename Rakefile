@@ -38,6 +38,13 @@ task :pre_commit do
   execute_tests_in("common")
 end
 
+desc "Creates a Kata project"
+task :kata, [:kata_name] do |t, args|
+  kata_name = args.kata_name
+  create_problem_lib kata_name
+  create_problem_spec kata_name
+end
+
 desc "By default runs last problem and the tests from the common folder"
 task :default => [:pre_commit, :latest] do 
 end
@@ -45,18 +52,32 @@ end
 desc "Creates a blank project with a problem{problem_id}.rb file and a problem{problem_id}_spec.rb file, the spec pointing to the problem and the problem pointing to the base directory for the common library"
 task :create, [:problem_id] do |t, args|
   problem_id = args.problem_id
-  lib="#{problem_id}/lib"
-  spec="#{problem_id}/spec"
+  create_problem_lib "Problem#{problem_id}", problem_id
+  create_problem_spec "Problem#{problem_id}", problem_id
+end
+
+def create_problem_lib(name, folder = name) 
+  lib="#{folder}/lib"
   mkdir_p lib
+
+  File.open("#{lib}/#{camel_to_snake(name)}.rb", "w") do |file| 
+    file.write problem_template(name)
+  end
+end
+
+def create_problem_spec(name, folder = name)
+  spec="#{folder}/spec"
   mkdir_p spec
 
-  File.open("#{lib}/problem#{problem_id}.rb", "w") do |file| 
-    file.write problem_template(problem_id)
+  File.open("#{spec}/#{camel_to_snake(name)}_spec.rb", "w") do |file|
+    file.write spec_template(name)
   end
+end
 
-  File.open("#{spec}/problem#{problem_id}_spec.rb", "w") do |file|
-    file.write spec_template(problem_id)
-  end
+def camel_to_snake(name)
+  name.gsub(/([A-Z]+)/, "_\\1")
+      .sub(/^_/, "")
+      .downcase
 end
 
 desc "Reload all description"
@@ -91,12 +112,12 @@ def download_description(problem_id)
   end
 end
 
-def spec_template(problem_id)
+def spec_template(name)
 """
-require 'problem#{problem_id}'
+require '#{camel_to_snake(name)}'
 require 'solution_printer'
 
-describe Problem#{problem_id} do
+describe #{name} do
   it \"I_represent_an_empty_test\" do
   end
 
@@ -105,17 +126,17 @@ describe Problem#{problem_id} do
     result.should == 0
   end
 end
-"""
+""".lstrip
 end
 
-def problem_template(problem_id)
+def problem_template(name)
 """
 $:.unshift File.expand_path(\"../../../common/lib/\", __FILE__)
 
-class Problem#{problem_id}
+class #{name}
 
 end
-"""
+""".lstrip
 end
 
 def get_spec_dirs
