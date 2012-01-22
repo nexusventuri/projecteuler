@@ -1,7 +1,8 @@
+#!/bin/bash
 rvm use ruby-1.9.3@project-euler2 --create
-if [ -z `which bundle` ]; then
+bundle_installed=`which bundle`
+if [ -z "$bundle_installed" ]; then
   gem install bundler
 fi
 
 bundle install
-
