@@ -1,1 +1,7 @@
-rvm use ruby-1.9.2@project-euler2 --create
+rvm use ruby-1.9.3@project-euler2 --create
+if [ -z `which bundler` ]; then
+  gem install bundler
+fi
+
+bundle install
+
