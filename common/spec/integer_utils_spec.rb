@@ -97,6 +97,17 @@ describe IntegerUtils do
     20.end_digits(1000).should == 20
     12345.end_digits(3).should == 345
   end
+
+  it "palindromic" do
+    121.palindromic?.should == true
+    127.palindromic?.should == false
+  end
+
+  it "binary palindromic" do
+    9.binary_palindromic?.should == true
+    8.binary_palindromic?.should == false
+  end
+
   def divisors
     @divisors = @divisors || Divisors.new
   end

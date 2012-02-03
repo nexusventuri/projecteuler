@@ -113,6 +113,16 @@ module IntegerUtils
       selection.sort.join("") == (range).to_a.join("")
   end
 
+  def palindromic?
+    as_string = self.to_s
+    as_string == as_string.reverse
+  end
+
+  def binary_palindromic?
+    as_binary_string = self.to_s(2)
+    as_binary_string == as_binary_string.reverse
+  end
+
   def primes_smaller
     primes.get_till(self)
   end
