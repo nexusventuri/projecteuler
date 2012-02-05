@@ -25,8 +25,8 @@ module IntegerUtils
   end
 
   def get_factors
-    inject_prime_factors({}) do |divisors_map, count, divisor| 
-      divisors_map[divisor] = count
+    inject_prime_factors({}) do |divisors_map, count, prime| 
+      divisors_map[prime] = count
       divisors_map
     end
   end
@@ -34,7 +34,7 @@ module IntegerUtils
   def inject_prime_factors(initial_value)
     remainder = self
     result = initial_value
-    primes.get_till(Math.sqrt(remainder).floor).each do |x|
+    primes.till(Math.sqrt(remainder).floor) do |x|
       count = 0
       while(remainder % x == 0)
         remainder = remainder/x

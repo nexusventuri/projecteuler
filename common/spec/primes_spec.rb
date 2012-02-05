@@ -5,7 +5,7 @@ describe Primes do
     primes.get(1).should =~ [2,3]
     primes.get(2).should =~ [2,3]
     primes.get(3).should =~ [2,3]
-    primes.get(4).should =~ [2,3]
+    primes.get(4).should =~ [2,3,5]
     primes.get(5).should =~ [2,3,5]
     primes.get(41).should =~ [2,3,5,7,11,13,17,19,23,29,31,37,41]
     primes.get(1).should =~ [2,3,5,7,11,13,17,19,23,29,31,37,41]
@@ -17,6 +17,16 @@ describe Primes do
     primes.get_till(41).should =~ [2,3,5,7,11,13,17,19,23,29,31,37,41]
     primes.get_till(2).should =~ [2]
     primes.get_till(42).should =~ [2,3,5,7,11,13,17,19,23,29,31,37,41]
+  end
+
+  it "Should let you loop till a certain value" do
+    found = false
+    primes.till(6) {|x| [2, 3, 5, 7].include?(x).should == true; found = true}
+    found.should == true
+
+    found = false
+    primes.till(14) {|x| [2, 3, 5, 7, 11, 13, 17].include?(x).should == true; found = true}
+    found.should == true
   end
 
   def primes
