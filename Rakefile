@@ -167,14 +167,17 @@ def result_report
 
   total_suites = results.length
 
-  total_success = results.count {|result|result.success?}
+  total_failures = results.select {|result|!result.success?}
 
   tests_without_results = results.select{|result| !result.has_solution? && result.project.problem? }
 
   slow_tests = Project.slow_projects
 
-  puts "We ran #{total_suites} test suites and had #{total_success} success and #{total_suites - total_success} failures"
+  puts "We ran #{total_suites} test suites and had #{total_suites - total_failures.length} success and #{total_failures.count} failures"
+  puts "The following tests failed:\n* #{total_failures.map{|failure| failure.name}.join("\n *")}"
+  puts
   puts "#{slow_tests.length} are marked as slow, here's the list of slow tests:\n* #{slow_tests.map{|result| result.name}.join("\n* ")}" if slow_tests.length > 0
+  puts
   puts "It seems there some tests without results(#{tests_without_results.length}), to be precise here's the list:\n* #{tests_without_results.map{|result|result.name}.join("\n* ")}" if tests_without_results.length > 0 
   puts
 end
