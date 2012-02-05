@@ -77,15 +77,6 @@ module IntegerUtils
     self.to_s.each_char.map{|x| x.to_i}
   end
 
-  def length10
-    tmp = self
-    count = 1
-    while (tmp /= 10) != 0
-      count += 1
-    end
-    count
-  end
-
   def factorial
     @@factorials[self] ||= self * (self - 1).factorial()
   end
@@ -96,21 +87,19 @@ module IntegerUtils
   end
 
   def start_pandigital? (range)
-    selection = self.to_s[0...range.count].to_s.scan(/./)
+    selection = self.to_s[0...range.count].scan(/./)
 
-    selection.uniq.length == selection.length && 
       selection.sort.join("") == (range).to_a.join("")
   end
 
   def end_digits(number)
-    selection = (self % (10 ** number))
+    (self % (10 ** number))
   end
 
   def end_pandigital?(range)
     selection = end_digits(range.count).to_s.scan(/./)
 
-    selection.uniq.length == selection.length && 
-      selection.sort.join("") == (range).to_a.join("")
+    selection.sort.join("") == (range).to_a.join("")
   end
 
   def palindromic?
@@ -129,6 +118,11 @@ module IntegerUtils
 
   def primes
     @@primes
+  end
+
+  def length10
+    val = 1
+    @lenght_base_10 ||= (1..1000000).detect{|x| (val *= 10) > self }
   end
 end
 

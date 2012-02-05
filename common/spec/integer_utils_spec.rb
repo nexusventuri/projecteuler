@@ -90,6 +90,8 @@ describe IntegerUtils do
     0.length10.should == 1
     25.length10.should == 2
     1234567890.length10.should == 10
+    9999999999.length10.should == 10
+    1000000000.length10.should == 10
   end
 
   it "Should get the end digits" do
