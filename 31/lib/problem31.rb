@@ -1,4 +1,5 @@
 $:.unshift File.expand_path("../../../common/lib/", __FILE__)
+require 'quotient'
 
 class Problem31
   attr_reader :partial_split
@@ -35,24 +36,5 @@ class Problem31
   end
 
   def count_permutations_from_base(splitted)
-  end
-end
-
-
-
-class Quotient
-  attr_reader :rest, :times, :divisor
-  def initialize(num, divisor)
-    @divisor = divisor
-    @rest = num % divisor
-    @times = (num / divisor).floor
-  end
-
-  def has_rest?
-    @rest != 0
-  end
-
-  def to_s
-    "Quotient #{@rest + @times * @divisor}/#{@divisor} = #{@times} + #{@rest}"
   end
 end
