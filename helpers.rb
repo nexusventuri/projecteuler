@@ -53,7 +53,7 @@ class Project
   end
 
   def last_access
-    :path.mtime
+    @path.mtime
   end
 
   def initialize(directory)
