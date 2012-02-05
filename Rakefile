@@ -11,8 +11,20 @@ desc "Runs all tests"
 task :run_all do
   result_report{
     time {
-      get_spec_dirs.sort.inject([]) do |acc, dir|
-        acc << execute_tests_in(dir)
+      Project.all_projects.sort{|a,b| a.path <=> b.path}.inject([]) do |acc, project|
+        acc << project.execute_tests
+      end
+    }
+  }
+end
+
+desc "Run fast tests"
+task :run_fast do
+  result_report{
+    time {
+      Project.all_projects.sort{|a,b| a.path <=> b.path}.inject([]) do |acc, project|
+        acc << project.execute_tests if !project.slow?
+        acc
       end
     }
   }
@@ -24,18 +36,17 @@ end
 
 desc "Runs latest modified directory"
 task :latest do
-  most_recent_project = get_spec_dirs.sort{|a,b| File.mtime(a) <=> File.mtime(b)}.last
-  execute_tests_in(most_recent_project)
+  Project.most_recent.execute_tests
 end
 
 desc "Runs a specific test"
 task :run, :problem_id do |t, args|
-  execute_tests_in(args.problem_id)
+  Project.new(args.problem_id).execute_tests
 end
 
 desc "Runs all the tests in the common folder(a library that might be virtually be shared by any problem)"
 task :pre_commit do
-  execute_tests_in("common")
+  Project.new("common").execute_tests
 end
 
 desc "Creates a Kata project"
@@ -82,7 +93,7 @@ end
 
 desc "Reload all description"
 task :all_desc do
-  get_spec_dirs.keep_if{|name| name =~ /\d+$/}.each{|name| download_description name[/\d+$/]}
+  Project.all_projects.keep_if{|el| el.problem?}.each{|name| download_description name[/\d+$/]}
 end
 
 desc "Downloads the problem description"
@@ -139,36 +150,6 @@ end
 """.lstrip
 end
 
-def get_spec_dirs
-  Dir['**/spec'].map{|dir| File.expand_path(dir + "/..")}
-end
-
-def execute_tests_in(basedir)
-  spec_dir = Pathname.new(basedir).join("spec")
-  lib_dir = Pathname.new(basedir).join("lib")
-  if spec_dir.directory?
-    print_result_header basedir
-
-    output=`rspec #{spec_dir} -I #{lib_dir}`
-
-    result = BuildResult.new(basedir, output, $?)
-    result.pretty_print_result
-    print_result_separator
-  end
-  
-  result
-end
-
-def print_result_header(dir)
-    puts ""
-    puts "Executing tests in #{dir}"
-end
-
-def print_result_separator()
-    puts ""
-    puts "----------------------------------"
-    puts ""
-end
 
 def time
   result = nil
@@ -180,21 +161,20 @@ def time
   result
 end
 
+
 def result_report
   results = yield
 
   total_suites = results.length
-  total_success = results.inject(0) do |acc, result| 
-    acc += 1 if result.success?
-    acc
-  end
 
-  tests_without_results = results.inject([]) do |acc, result| 
-    acc << result.problem_number if !result.has_solution? && result.problem?
-    acc
-  end
+  total_success = results.count {|result|result.success?}
+
+  tests_without_results = results.select{|result| !result.has_solution? && result.project.problem? }
+
+  slow_tests = Project.slow_projects
 
   puts "We ran #{total_suites} test suites and had #{total_success} success and #{total_suites - total_success} failures"
-  puts "It seems there many tests without results(#{tests_without_results.length}), to be precise here's the list:\n* #{tests_without_results.join("\n* ")}" if tests_without_results.length > 0 
+  puts "#{slow_tests.length} are marked as slow, here's the list of slow tests:\n* #{slow_tests.map{|result| result.name}.join("\n* ")}" if slow_tests.length > 0
+  puts "It seems there some tests without results(#{tests_without_results.length}), to be precise here's the list:\n* #{tests_without_results.map{|result|result.name}.join("\n* ")}" if tests_without_results.length > 0 
   puts
 end
