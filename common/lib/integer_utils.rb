@@ -34,7 +34,7 @@ module IntegerUtils
   def inject_prime_factors(initial_value)
     remainder = self
     result = initial_value
-    primes.till(Math.sqrt(remainder).floor) do |x|
+    @@primes.till(Math.sqrt(remainder).floor) do |x|
       count = 0
       while(remainder % x == 0)
         remainder = remainder/x
@@ -48,7 +48,7 @@ module IntegerUtils
   end
 
   def has_proper_prime_divisors?
-    result = primes.get_till(Math.sqrt(self).floor + 2).detect{|x| self != x && self % x == 0}
+    result = @@primes.get_till(Math.sqrt(self).floor + 2).detect{|x| self != x && self % x == 0}
     result.nil?
   end
 
@@ -113,10 +113,18 @@ module IntegerUtils
   end
 
   def primes_smaller
-    primes.get_till(self)
+    @@primes.get_till(self)
   end
 
-  def primes
+  def remove_left_digit
+    self % (10 ** (self.length10() -1))
+  end
+
+  def remove_right_digit
+    self / 10
+  end
+
+  def self.primes
     @@primes
   end
 

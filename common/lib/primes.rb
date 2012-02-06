@@ -7,8 +7,7 @@ class Primes
   def get(value)
     return @current_list if @last_index >= value
     while(@last_index < value) do
-      try_next
-    end
+      try_next end
     @current_list
   end
 

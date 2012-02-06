@@ -110,6 +110,20 @@ describe IntegerUtils do
     8.binary_palindromic?.should == false
   end
 
+  it "should remove right digit" do
+    11.remove_right_digit.should == 1
+    12.remove_right_digit.should == 1
+    992.remove_right_digit.should == 99
+    1.remove_right_digit.should == 0
+  end
+
+  it "should remove left digit" do
+    11.remove_left_digit.should == 1
+    12.remove_left_digit.should == 2
+    992.remove_left_digit.should == 92
+    1.remove_left_digit.should == 0
+  end
+
   def divisors
     @divisors = @divisors || Divisors.new
   end
