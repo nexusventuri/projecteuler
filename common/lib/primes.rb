@@ -4,7 +4,7 @@ class Primes
     @current_list = [2, 3]
   end
 
-  def get(value)
+  def get_all(value)
     return @current_list if @last_index >= value
     while(@last_index < value) do
       try_next end
@@ -12,7 +12,7 @@ class Primes
   end
 
   def get_till(value)
-    computed_primes = get(value)
+    computed_primes = get_all(value)
     max_index = computed_primes.index {|x| x > value} || computed_primes.length
 
     computed_primes[0, max_index]
@@ -41,3 +41,4 @@ class Primes
     end
   end
 end
+

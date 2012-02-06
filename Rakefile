@@ -174,10 +174,14 @@ def result_report
   slow_tests = Project.slow_projects
 
   puts "We ran #{total_suites} test suites and had #{total_suites - total_failures.length} success and #{total_failures.count} failures"
-  puts "The following tests failed:\n* #{total_failures.map{|failure| failure.name}.join("\n *")}"
+  puts "The following tests failed:\n* #{total_failures.map{|failure| failure.name}.join("\n *")}" if total_failures.count > 0 
   puts
   puts "#{slow_tests.length} are marked as slow, here's the list of slow tests:\n* #{slow_tests.map{|result| result.name}.join("\n* ")}" if slow_tests.length > 0
   puts
   puts "It seems there some tests without results(#{tests_without_results.length}), to be precise here's the list:\n* #{tests_without_results.map{|result|result.name}.join("\n* ")}" if tests_without_results.length > 0 
   puts
+  puts "And timing for tests:"
+  results.each do |result|
+    puts "#{result.name}:\t#{result.execution_time.total}s"
+  end
 end

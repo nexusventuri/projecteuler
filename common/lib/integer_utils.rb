@@ -132,10 +132,32 @@ module IntegerUtils
     val = 1
     @lenght_base_10 ||= (1..1000000).detect{|x| (val *= 10) > self }
   end
+
+  def is_truncatable_prime?
+    return false if self < 10
+    length = self.length10() -1
+    left = self
+    right = self
+    (1..length).all? do
+      left = left.remove_left_digit
+      right = right.remove_right_digit
+      left.prime? && right.prime?
+    end
+  end
+
 end
 
 class Integer
   include IntegerUtils
+end
+
+class Array
+  def binarysearch(tf,lower=0, upper=length-1)
+    return if lower > upper
+    mid = (lower+upper)/2
+    tf < self[mid] ? upper = mid-1 : lower = mid+1
+    tf == self[mid] ? mid : binarysearch(tf,lower,upper)
+  end
 end
 
 def print_time(label)

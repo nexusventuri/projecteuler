@@ -8,10 +8,11 @@ WHITE="\e[01;37m"
 LIGHT_BLUE="\e[01;34m"
 
 class BuildResult
-  attr_reader :output, :shell_result, :basedir, :project
-  def initialize(project, output, shell_result)
+  attr_reader :output, :shell_result, :basedir, :project, :execution_time
+  def initialize(project, output, shell_result, execution_time)
     @output, @shell_result = output, shell_result
     @project = project
+    @execution_time = execution_time
   end
 
   def success?
@@ -97,7 +98,7 @@ class Project
       output = nil
       time = Benchmark.measure {output = `rspec #{spec_dir} -I #{lib_dir}`}
 
-      result = BuildResult.new(self, output, $?)
+      result = BuildResult.new(self, output, $?, time)
       result.pretty_print_result
       set_execution_speed time
       print_result_separator

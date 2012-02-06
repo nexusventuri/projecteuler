@@ -2,13 +2,13 @@ require 'primes'
 
 describe Primes do
   it "Should return the list of primes till a certain number" do
-    primes.get(1).should =~ [2,3]
-    primes.get(2).should =~ [2,3]
-    primes.get(3).should =~ [2,3]
-    primes.get(4).should =~ [2,3,5]
-    primes.get(5).should =~ [2,3,5]
-    primes.get(41).should =~ [2,3,5,7,11,13,17,19,23,29,31,37,41]
-    primes.get(1).should =~ [2,3,5,7,11,13,17,19,23,29,31,37,41]
+    primes.get_all(1).should =~ [2,3]
+    primes.get_all(2).should =~ [2,3]
+    primes.get_all(3).should =~ [2,3]
+    primes.get_all(4).should =~ [2,3,5]
+    primes.get_all(5).should =~ [2,3,5]
+    primes.get_all(41).should =~ [2,3,5,7,11,13,17,19,23,29,31,37,41]
+    primes.get_all(1).should =~ [2,3,5,7,11,13,17,19,23,29,31,37,41]
   end 
 
   it "Should return part of the primes needed" do

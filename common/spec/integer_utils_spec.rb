@@ -124,6 +124,13 @@ describe IntegerUtils do
     1.remove_left_digit.should == 0
   end
 
+  it "Should find trucatable prime" do
+    2.is_truncatable_prime?.should == false
+    7.is_truncatable_prime?.should == false
+    3797.is_truncatable_prime?.should == true
+    3792.is_truncatable_prime?.should == false
+  end
+
   def divisors
     @divisors = @divisors || Divisors.new
   end
